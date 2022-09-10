@@ -45,6 +45,8 @@ When this script has been included in your own map script using `#include` you c
 
 ## Exiting observer mode and remembering player position
 
+Players can opt to exit observation at any time by using the tertiary attack bind `+alt`, which is usually bound to mouse middle click. They will be shown a reminder of this whilst observing.
+
 When added as a point entity or called directly via API it can optionally remember where the player was prior to starting observation, so that when they later leave observation they're put back where they were instead of just respawning.
 
 Because observing players are technically dead and "out of play" when the player exits observer they will see themselves respawn for a tiny moment before being moved to back where they were. This also means that if there are no available (active) spawn points, or the map is running survival mode, then a player **cannot exit observer mode** until a spawn point becomes available or survival checkpoint is reached.
