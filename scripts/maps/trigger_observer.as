@@ -180,9 +180,8 @@ namespace TriggerObserver
         pPlayer.GetObserver().StartObserver(pPlayer.pev.origin, pPlayer.pev.angles, false);
         pPlayer.pev.nextthink = (g_Engine.time + (ENT_LOOP_INTERVAL * 2));
 
-        g_PlayerFuncs.ClientPrint(pPlayer, HUD_PRINTTALK, "* Press TERTIARY ATTACK to leave observer mode.\n");
-        g_PlayerFuncs.ClientPrint(pPlayer, HUD_PRINTTALK, "* This is usually done by pressing the MIDDLE BUTTON (wheel) of your mouse.\n");
-
+        Messager( pPlayer, 1 );
+        
         pCustom.SetKeyvalue("$v_observer_prior_origin", pPlayer.pev.origin);
         pCustom.SetKeyvalue("$v_observer_prior_angles", pPlayer.pev.angles);
     }
@@ -269,26 +268,120 @@ namespace TriggerObserver
                 continue;
             }
 
-            HUDTextParams sHudTextObserverExitReminder;
-
-            sHudTextObserverExitReminder.channel        = 3;
-            sHudTextObserverExitReminder.x              = -1;
-            sHudTextObserverExitReminder.y              = 0.9;
-            sHudTextObserverExitReminder.effect         = 1;
-            sHudTextObserverExitReminder.r1             = 100;
-            sHudTextObserverExitReminder.g1             = 100;
-            sHudTextObserverExitReminder.b1             = 100;
-            sHudTextObserverExitReminder.r2             = 240;
-            sHudTextObserverExitReminder.g2             = 240;
-            sHudTextObserverExitReminder.b2             = 240;
-            sHudTextObserverExitReminder.fadeinTime     = 0;
-            sHudTextObserverExitReminder.fadeoutTime    = 0;
-            sHudTextObserverExitReminder.holdTime       = (ENT_LOOP_INTERVAL * 3);
-            sHudTextObserverExitReminder.fxTime         = 0.1;
-
-            g_PlayerFuncs.HudMessage(pPlayer, sHudTextObserverExitReminder, "Press TERTIARY ATTACK to leave observer mode.");
-
+            // Show the binded key in the center just in case
+            g_PlayerFuncs.PrintKeyBindingString( pPlayer, "+alt1");
+            Messager( pPlayer, 0 );
+            
             pPlayer.pev.nextthink = (g_Engine.time + (ENT_LOOP_INTERVAL * 2));
+        }
+    }
+
+/*
+    Let players see a custom language choosed by its own if the plugin multi_language is installed otherwise just show english for everyone -Mikk
+    https://github.com/Mikk155/Sven-Co-op/blob/main/scripts/plugins/mikk/multi_language.as
+*/
+	void Messager( CBasePlayer@ pPlayer, int mode )
+	{
+        HUDTextParams sHudTextObserverExitReminder;
+
+        sHudTextObserverExitReminder.channel        = 3;
+        sHudTextObserverExitReminder.x              = -1;
+        sHudTextObserverExitReminder.y              = 0.9;
+        sHudTextObserverExitReminder.effect         = 1;
+        sHudTextObserverExitReminder.r1             = 100;
+        sHudTextObserverExitReminder.g1             = 100;
+        sHudTextObserverExitReminder.b1             = 100;
+        sHudTextObserverExitReminder.r2             = 240;
+        sHudTextObserverExitReminder.g2             = 240;
+        sHudTextObserverExitReminder.b2             = 240;
+        sHudTextObserverExitReminder.fadeinTime     = 0;
+        sHudTextObserverExitReminder.fadeoutTime    = 0;
+        sHudTextObserverExitReminder.holdTime       = (ENT_LOOP_INTERVAL * 3);
+        sHudTextObserverExitReminder.fxTime         = 0.1;
+        
+        // Gets their values from multi-language plugin
+        CustomKeyvalues@ ckLenguage = pPlayer.GetCustomKeyvalues();
+        CustomKeyvalue ckLenguageIs = ckLenguage.GetKeyvalue("$f_lenguage");
+        int iLanguage = int(ckLenguageIs.GetFloat());
+    /*
+        Languages:
+        Value of 0 or higher than 7 mean english.-
+        1 = Spanish
+        2 = Portuguese PT/BR
+        3 = German
+        4 = French
+        5 = Italian
+        6 = Esperanto
+    */
+        // Shows the proper language
+        if( mode == 0 )
+        {
+            if(iLanguage == 1 ) // Spanish
+            {
+                g_PlayerFuncs.HudMessage( pPlayer, sHudTextObserverExitReminder, "Presiona +alt1 para salir del modo espectador.\nTu letra bindeada es mostrada en tu pantalla.\n" );
+            }
+            else if(iLanguage == 2 ) // Portuguese
+            {
+                g_PlayerFuncs.HudMessage( pPlayer, sHudTextObserverExitReminder, "Press +alt1 to leave observer mode.\nYour binded key is shown in the screen\n" );
+            }
+            else if(iLanguage == 3 ) // German
+            {
+                g_PlayerFuncs.HudMessage( pPlayer, sHudTextObserverExitReminder, "Press +alt1 to leave observer mode.\nYour binded key is shown in the screen\n" );
+            }
+            else if(iLanguage == 4 ) // French
+            {
+                g_PlayerFuncs.HudMessage( pPlayer, sHudTextObserverExitReminder, "Press +alt1 to leave observer mode.\nYour binded key is shown in the screen\n" );
+            }
+            else if(iLanguage == 5 ) // Italian
+            {
+                g_PlayerFuncs.HudMessage( pPlayer, sHudTextObserverExitReminder, "Press +alt1 to leave observer mode.\nYour binded key is shown in the screen\n" );
+            }
+            else if(iLanguage == 6 ) // Esperanto
+            {
+                g_PlayerFuncs.HudMessage( pPlayer, sHudTextObserverExitReminder, "Press +alt1 to leave observer mode.\nYour binded key is shown in the screen\n" );
+            }
+            else // Anything else = English
+            {
+                g_PlayerFuncs.HudMessage( pPlayer, sHudTextObserverExitReminder, "Press +alt1 to leave observer mode.\nYour binded key is shown in the screen\n" );
+            }
+        }else
+        if( mode == 1 )
+        {
+            if(iLanguage == 1 ) // Spanish
+            {
+                g_PlayerFuncs.ClientPrint(pPlayer, HUD_PRINTTALK, "* Presiona ATAQUE TERCIARIO para salir del modo espectador.\n");
+                g_PlayerFuncs.ClientPrint(pPlayer, HUD_PRINTTALK, "* Esto normalmente se hace presionando el boton del medio (la ruedita) de tu raton.\n");
+            }
+            else if(iLanguage == 2 ) // Portuguese
+            {
+                g_PlayerFuncs.ClientPrint(pPlayer, HUD_PRINTTALK, "* Press TERTIARY ATTACK to leave observer mode.\n");
+                g_PlayerFuncs.ClientPrint(pPlayer, HUD_PRINTTALK, "* This is usually done by pressing the MIDDLE BUTTON (wheel) of your mouse.\n");
+            }
+            else if(iLanguage == 3 ) // German
+            {
+                g_PlayerFuncs.ClientPrint(pPlayer, HUD_PRINTTALK, "* Press TERTIARY ATTACK to leave observer mode.\n");
+                g_PlayerFuncs.ClientPrint(pPlayer, HUD_PRINTTALK, "* This is usually done by pressing the MIDDLE BUTTON (wheel) of your mouse.\n");
+            }
+            else if(iLanguage == 4 ) // French
+            {
+                g_PlayerFuncs.ClientPrint(pPlayer, HUD_PRINTTALK, "* Press TERTIARY ATTACK to leave observer mode.\n");
+                g_PlayerFuncs.ClientPrint(pPlayer, HUD_PRINTTALK, "* This is usually done by pressing the MIDDLE BUTTON (wheel) of your mouse.\n");
+            }
+            else if(iLanguage == 5 ) // Italian
+            {
+                g_PlayerFuncs.ClientPrint(pPlayer, HUD_PRINTTALK, "* Press TERTIARY ATTACK to leave observer mode.\n");
+                g_PlayerFuncs.ClientPrint(pPlayer, HUD_PRINTTALK, "* This is usually done by pressing the MIDDLE BUTTON (wheel) of your mouse.\n");
+            }
+            else if(iLanguage == 6 ) // Esperanto
+            {
+                g_PlayerFuncs.ClientPrint(pPlayer, HUD_PRINTTALK, "* Press TERTIARY ATTACK to leave observer mode.\n");
+                g_PlayerFuncs.ClientPrint(pPlayer, HUD_PRINTTALK, "* This is usually done by pressing the MIDDLE BUTTON (wheel) of your mouse.\n");
+            }
+            else // Anything else = English
+            {
+                g_PlayerFuncs.ClientPrint(pPlayer, HUD_PRINTTALK, "* Press TERTIARY ATTACK to leave observer mode.\n");
+                g_PlayerFuncs.ClientPrint(pPlayer, HUD_PRINTTALK, "* This is usually done by pressing the MIDDLE BUTTON (wheel) of your mouse.\n");
+            }
         }
     }
 }
