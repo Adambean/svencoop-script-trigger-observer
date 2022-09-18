@@ -37,14 +37,23 @@ namespace TriggerObserver
         leavingToResumeOrigin   = 3,
     };
 
+    /** @var bool g_isInitialised Is initialised. */
+    bool g_isInitialised = false;
+
     /**
      * Initialise.
      * @return void
      */
     void Init()
     {
+        if (g_isInitialised) {
+            g_Game.AlertMessage(at_warning, "[TriggerObserver] Already initialised.\n");
+            return;
+        }
+
         g_CustomEntityFuncs.RegisterCustomEntity("TriggerObserver::CTriggerObserver", "trigger_observer");
         g_Scheduler.SetInterval("ObserverThink", ENT_LOOP_INTERVAL, g_Scheduler.REPEAT_INFINITE_TIMES);
+        g_isInitialised = true;
     }
 
     /**
