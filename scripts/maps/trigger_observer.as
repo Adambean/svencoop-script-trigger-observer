@@ -124,11 +124,21 @@ namespace TriggerObserver
          */
         void Use(CBaseEntity@ pActivator, CBaseEntity@ pCaller, USE_TYPE useType, float flValue)
         {
-            if (pActivator is null or !pActivator.IsPlayer()) {
+            CBaseEntity@ pTarget;
+
+            if ("!activator" == pev.target or "" == pev.target) {
+                @pTarget = pActivator;
+            } else if ("!caller" == pev.target) {
+                @pTarget = pCaller;
+            } else {
+                @pTarget = g_EntityFuncs.FindEntityByTargetname(null, pev.target);
+            }
+
+            if (pTarget is null or !pTarget.IsPlayer()) {
                 return;
             }
 
-            CBasePlayer@ pPlayer = cast<CBasePlayer@>(pActivator);
+            CBasePlayer@ pPlayer = cast<CBasePlayer@>(pTarget);
             if (!pPlayer.IsConnected()) {
                 return;
             }
