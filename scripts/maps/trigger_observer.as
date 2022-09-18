@@ -290,6 +290,7 @@ namespace TriggerObserver
 
                 pPlayer.pev.nextthink = (g_Engine.time + 0.01);
                 pPlayer.KeyValue("$i_is_observer", eObserverState::off);
+                g_PlayerFuncs.ClientPrint(pPlayer, HUD_PRINTCENTER, "Stopped observing.");
                 continue;
             }
 
