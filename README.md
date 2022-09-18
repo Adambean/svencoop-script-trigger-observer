@@ -6,9 +6,42 @@ This script implements an entity for use in maps, `trigger_observer`, which can 
 
 This script needs to be at game path "scripts/maps/trigger_observer.as". Then in a map do **one** of the following:
 
-* Add a `trigger_script` entity pointing to file "trigger_observer.as". (No function to call.)
-* Add a map configuration entry "map_script trigger_observer".
-* In your existing map script add an include `#include trigger_observer`.
+### With an entity
+
+Add a `trigger_script` entity pointing to file "trigger_observer.as". (No function to call.)
+
+### With your map configuration
+
+Add a line to your map configuration entry:
+
+```
+map_script trigger_observer
+```
+
+### Include in your existing map script
+
+If you have a main map script you can include this script as follows:
+
+```
+#include trigger_observer
+```
+
+However if your map script has a `MapInit()` function you must also call the observer initialisation in there, for example:
+
+```
+/**
+ * Map initialisation handler.
+ * @return void
+ */
+void MapInit()
+{
+    g_Module.ScriptInfo.SetAuthor("Your \"Alias\" Name");
+    g_Module.ScriptInfo.SetContactInfo("www.example.com");
+
+    // Initialise trigger_observer
+    TriggerObserver::Init();
+}
+```
 
 ## Brush entity
 
@@ -23,8 +56,10 @@ Add a brush entity with class name `trigger_observer`:
 Add a point entity with classname `trigger_observer`:
 
 * Key `targetname` is necessary to take input from another entity.
-* There is currently no `target` key.
-* Spawnflag 1 `1<<0`: Do not remember position of players prior to observing.
+* You can optionally declare a `target` if you need to make a specific player start/stop observing by their target name.
+    * Leave empty to assume activator. (E.g. a player pressing a button pointing to this `trigger_observer`.)
+    * Both "!activator" and "!caller" are supported.
+* Spawn flag 1 `1<<0`: Do not remember position of players prior to observing. (See "Exiting observer mode and remembering player position" below.)
 
 You can then target the entity however you like, such as a button, brush (e.g. `trigger_multiple`), or logic entity (e.g. `multi_manager`) to start or stop observer mode on a player.
 
@@ -42,6 +77,7 @@ When this script has been included in your own map script using `#include` you c
 
 * Start observing: `StartObserving(CBasePlayer@ pPlayer, bool fSavePosition = false): void`
 * Stop observing: `StopObserving(CBasePlayer@ pPlayer, bool fIgnoreSavedPosition = false): void`
+* Check if a player is observing: `IsObserving(CBasePlayer@ pPlayer): bool`
 
 ## Exiting observer mode and remembering player position
 
