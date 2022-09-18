@@ -155,13 +155,27 @@ namespace TriggerObserver
                     break;
 
                 case USE_TOGGLE:
-                    pPlayer.GetObserver().IsObserver()
+                    IsObserving(pPlayer)
                         ? StopObserving(pPlayer)
                         : StartObserving(pPlayer, !self.pev.SpawnFlagBitSet(FLAG_NO_SAVE_POSITION))
                     ;
                     break;
             }
         }
+    }
+
+    /**
+     * Check if a player is currently observing.
+     * @param  CBasePlayer@ pPlayer Player entity
+     * @return bool                 Player is observing or not
+     */
+    bool IsObserving(CBasePlayer@ pPlayer)
+    {
+        if (pPlayer is null or !pPlayer.IsPlayer() or !pPlayer.IsConnected()) {
+            return false;
+        }
+
+        return pPlayer.GetObserver().IsObserver();
     }
 
     /**
@@ -183,7 +197,7 @@ namespace TriggerObserver
         CustomKeyvalue pCustomObserverPriorOrigin(pCustom.GetKeyvalue("$v_observer_prior_origin"));
         CustomKeyvalue pCustomObserverPriorAngles(pCustom.GetKeyvalue("$v_observer_prior_angles"));
 
-        if (pPlayer.GetObserver().IsObserver()) {
+        if (IsObserving(pPlayer)) {
             g_Game.AlertMessage(at_logged, "\"%1\" cannot start observing: Already is observing.\n", g_Utility.GetPlayerLog(pPlayer.edict()));
             return;
         }
@@ -226,7 +240,7 @@ namespace TriggerObserver
 
         bool fResumePosition = (pCustomIsObserving.GetInteger() == 2);
 
-        if (!pPlayer.GetObserver().IsObserver()) {
+        if (!IsObserving(pPlayer)) {
             g_Game.AlertMessage(at_logged, "\"%1\" cannot finish observing: Isn't current observing.\n", g_Utility.GetPlayerLog(pPlayer.edict()));
             return;
         }
@@ -279,7 +293,7 @@ namespace TriggerObserver
                 continue;
             }
 
-            if (!pPlayer.GetObserver().IsObserver()) {
+            if (!IsObserving(pPlayer)) {
                 continue;
             }
 
