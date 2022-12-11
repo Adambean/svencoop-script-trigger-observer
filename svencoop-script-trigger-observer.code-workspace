@@ -1,0 +1,21 @@
+{
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "settings": {
+        "editor.insertSpaces": true,
+        "editor.tabSize": 4,
+        "files.eol": "\n",
+        "files.insertFinalNewline": true
+    },
+    "extensions": {
+        "recommendations": [
+            "bowlerhatllc.vscode-as3mxml",
+            "wmaurer.change-case",
+            "streetsidesoftware.code-spell-checker",
+            "tyriar.sort-lines"
+        ]
+    }
+}
