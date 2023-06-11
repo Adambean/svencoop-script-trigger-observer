@@ -12,7 +12,7 @@
     },
     "extensions": {
         "recommendations": [
-            "bowlerhatllc.vscode-as3mxml",
+			"renesackers.angelscript",
             "wmaurer.change-case",
             "streetsidesoftware.code-spell-checker",
             "tyriar.sort-lines",
